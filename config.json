@@ -1,0 +1,35 @@
+{
+	"high_battery_levels" : {
+		"100" : {
+			"message": "Battery Fully Charged",
+			"notification_icon" : "",
+			"notification_sound" : "",
+			"persistent": true
+		}
+	},	
+	"low_battery_levels" : {
+		"20": {
+			"message": "Battery Low",
+			"notification_icon" : "",
+			"notification_sound" : "",			
+			"persistent": true
+		},
+		"10": {
+			"message": "Battery Critically Low",
+			"notification_icon" : "",
+			"notification_sound" : "",
+			"persistent": true
+			
+		}		
+	},
+	
+	"charger_notifications": {
+		"charging": true,
+		"charging_icon": "",
+		"plugged_sound": "",
+		"discharging": true,
+		"discharging_icon": "",
+		"unplugged_sound": "",
+		"persistent": false
+	}
+}

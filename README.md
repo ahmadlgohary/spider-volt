@@ -1,0 +1,1 @@
+A battery notification daemon in rust. 
