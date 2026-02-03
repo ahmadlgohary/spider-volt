@@ -1,12 +1,6 @@
-use std::io;
-use battery;
+use std::{collections::HashSet, io};
 
-#[derive(Debug)]
-pub struct BatteryStats {
-    state: String, 
-    percentage: f32, 
-}
-
+use crate::{config::Config, notifications::{update_notification, testing_notification}};
 
 
 pub fn get_battery_manager () -> Option<battery::Manager> {
@@ -45,12 +39,97 @@ pub fn get_battery(battery_manager: & battery::Manager) -> Option<battery::Batte
 }
 
 
-pub fn get_battery_stats(battery_manager: &battery::Manager,  battery: &mut battery::Battery) -> Option<BatteryStats> {
-    // Function 
-    battery_manager.refresh(battery).ok()?;
-    return Some(
-                BatteryStats {
-                    state: battery.state().to_string(), 
-                    percentage: (battery.state_of_charge()).value
-                });
+#[derive(Debug)]
+pub struct BatteryStats {
+    prev_state: String,
+    last_notified_state: String,
+    current_state: String, 
+    percentage: i32, 
+}
+
+impl BatteryStats {
+
+    pub fn new(battery_manager: &battery::Manager,  battery: &mut battery::Battery) -> Option<Self> {
+
+        battery_manager.refresh(battery).ok()?;
+        let current_state =&battery.state().to_string();
+        let percentage = (battery.state_of_charge().value * 100.0) as i32;
+        let previous_state = if current_state == "discharging" {"charging"} else {"discharging"};
+
+        Some(
+            BatteryStats { 
+            prev_state: previous_state.to_string(), 
+            last_notified_state: current_state.to_string(),
+            current_state: current_state.to_string(),
+            percentage: percentage
+        })
+    } 
+    
+    pub fn get_battery_stats(self: &mut Self, battery_manager: &battery::Manager,  battery: &mut battery::Battery) {
+
+        match battery_manager.refresh(battery) {
+            Ok(()) => {
+                self.current_state = battery.state().to_string();
+                self.percentage = ((battery.state_of_charge()).value * 100.0) as i32;
+            },
+            Err(_) => ()  
+        }
+        ()
+    }
+
+    pub fn handle_charger_notifications(self: &mut Self, notification_id: u32) {
+
+        let inferred_state: &String;
+        if self.current_state == "unknown" { 
+            inferred_state = &self.prev_state; 
+        } else{
+            inferred_state = &self.current_state;
+        };
+        if *inferred_state != self.last_notified_state {
+            testing_notification(notification_id, inferred_state);
+
+            self.last_notified_state = inferred_state.to_string();
+        }
+    }
+
+    pub fn handle_battery(self: &mut Self, notification_id: u32, _configuration: &Config, notifications_sent: &mut HashSet<u8>) {
+        
+        // This means we switched states 
+        if self.prev_state != self.current_state {
+            if self.current_state != "unknown" {
+                self.prev_state = self.current_state.clone();
+            }
+            notifications_sent.clear();
+        }
+
+        if self.current_state == "discharging" {
+            
+            if let Some(low_charges) = &_configuration.low_battery_levels{
+                
+                for (battery_level, notification_info)  in low_charges.iter().rev(){
+                    if self.percentage <= *battery_level as i32 {
+                        if !(notifications_sent).contains(battery_level) {
+                            notifications_sent.insert(*battery_level);
+                            update_notification(notification_id, &self.percentage, &notification_info);
+                        }
+                    }
+                }
+            }
+            
+        }
+        else if self.current_state == "charging" {
+
+
+            if let Some(high_charges) = &_configuration.high_battery_levels{
+                for (battery_level, notification_info)  in high_charges.iter(){
+                    if self.percentage >= *battery_level as i32 {
+                        if !(notifications_sent).contains(battery_level) {
+                            notifications_sent.insert(*battery_level);
+                            update_notification(notification_id, &self.percentage, &notification_info);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

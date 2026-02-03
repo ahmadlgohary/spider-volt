@@ -4,22 +4,22 @@
 			"message": "Battery Fully Charged",
 			"notification_icon" : "",
 			"notification_sound" : "",
-			"persistent": true
+			"urgent_level": "Critical"
 		}
 	},	
+
 	"low_battery_levels" : {
 		"20": {
 			"message": "Battery Low",
 			"notification_icon" : "",
 			"notification_sound" : "",			
-			"persistent": true
+			"urgent_level": "Critical"
 		},
 		"10": {
 			"message": "Battery Critically Low",
 			"notification_icon" : "",
 			"notification_sound" : "",
-			"persistent": true
-			
+			"urgent_level": "Critical"
 		}		
 	},
 	
@@ -30,6 +30,6 @@
 		"discharging": true,
 		"discharging_icon": "",
 		"unplugged_sound": "",
-		"persistent": false
+		"urgent_level": "Normal"
 	}
 }
