@@ -1,5 +1,3 @@
-use rodio;
-
 pub fn play_notification_sound(sound_path: &str) {
     let stream_handle = match rodio::OutputStreamBuilder::open_default_stream(){
         Ok(stream_handle) => stream_handle,
