@@ -1,0 +1,57 @@
+# This is an example configuration
+# the default configuration is defaults to the following:
+# notification_time = 5000
+# [low_battery_levels.20]
+# message = "Battery Low"
+#
+# The rest being None
+
+
+# Optional field, defaults to 5000 ms (5 Seconds)
+notification_time = 5000
+
+# high_battery_levels section is optional, defaults to None  
+
+# the number next to the section's name is the associated percentage to send the notification at
+# Can include multiple
+[high_battery_levels.100] 
+# If this section is included, the message field is NOT optional
+message = "Battery Fully Charged"
+# Optional fields, all default to None
+notification_icon = "battery-charged"
+notification_sound = "/home/username/.config/scripts/assets/battery_charging.ogg"
+urgent_level = "Critical"
+
+# low_battery_levels section is optional, defaults to: 
+# [low_battery_levels.20]
+# message = "Battery Low"
+
+# the number next to the section's name is the associated percentage to send the notification at
+# Can include multiple
+[low_battery_levels.20]
+# If this section is included, the message field is NOT optional
+message = "Battery Low"
+# Optional fields, all default to None
+notification_icon = "battery-alert"
+urgent_level = "Critical"
+
+[low_battery_levels.10]
+# If this section is included, the message field is NOT optional
+message = "Battery Critically Low"
+# Optional fields, all default to None
+notification_icon = "battery-alert"
+notification_sound = "/home/username/.config/scripts/assets/battery_low.ogg"
+urgent_level = "Critical"
+
+# Optional Section, defaults to None  
+# Can include either one or none
+[charger_notifications]
+charging = true
+charging_icon = "battery-charging"
+plugged_sound = "/home/username/.config/scripts/assets/battery_charging.ogg"
+
+discharging = true
+discharging_icon = "battery-discharging"
+unplugged_sound = "/home/username/.config/scripts/assets/battery_discharging.mp3"
+
+urgent_level = "Normal"

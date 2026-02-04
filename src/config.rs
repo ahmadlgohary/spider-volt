@@ -15,15 +15,25 @@ pub struct Config {
 
 /// This function reads a json config file and parses it into the Config Struct
 impl Config {
-    pub fn parse_json() -> Config {
-        
+    pub fn parse_toml() -> Self {
         // TODO: 
         //  - make it take command line arguments for the path 
-        //  - make it deal with no config file found -> return all defaults
-        //  - make it deal with jsonc files
-        let file: String = fs::read_to_string("config.json").expect("Failed to open file");
-        let config: Config = serde_json::from_str(&file).unwrap();
-        config
+        fs::read_to_string("config.toml")
+            .ok()
+            .and_then(|file| { toml::from_str(&file).ok()})
+            .unwrap_or_else(|| { 
+                eprintln!("Failed to load config.toml, using defaults");
+                Self::default()})
+    }
+
+    /// This function creates a default config
+    fn default() -> Self {
+        let low_battery_map: BTreeMap<u8, BatteryNotification> = BTreeMap::from([
+            (20, BatteryNotification { message: "Battery Low".to_string(), 
+                notification_icon: None, notification_sound: None, urgent_level: None })]);
+            
+        Self { notification_time: None, high_battery_levels: None, 
+            low_battery_levels: Some(low_battery_map), charger_notifications: None }
     }
 
     /// Getter function to return the time specified in the configuration file

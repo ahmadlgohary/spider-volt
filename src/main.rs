@@ -8,7 +8,7 @@ mod notifications;
 mod audio;
 
 fn main() {
-    let configuration = config::Config::parse_json();
+    let configuration = config::Config::parse_toml();
     let mut battery_notif_sent: HashSet<u8> = HashSet::new();
     
     let manager = match battery_monitor::init_battery_manager() {
