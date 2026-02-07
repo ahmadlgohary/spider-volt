@@ -25,19 +25,19 @@ pub fn parse_cli() -> CliArgs {
         .arg(
             Arg::new("print-config")
                 .long("print-config")
-                .help("Print the resolved configuration and exit")
+                .help("Print the current configuration and exit")
                 .action(clap::ArgAction::SetTrue)
         )
         .arg(
            Arg::new("print-config-template")
                 .long("print-config-template")
-                .help("Print the config template")
+                .help("Print the config template and exit")
                 .action(clap::ArgAction::SetTrue)
         )
         .arg(
            Arg::new("create-config")
                 .long("create-config")
-                .help("Create a config file at '~/.config/batsignal-rs', if one does not exit")
+                .help("Create '~/.config/spider-volt/config.toml' if missing and exit")
                 .action(clap::ArgAction::SetTrue)
         )
         .get_matches();

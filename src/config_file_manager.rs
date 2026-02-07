@@ -5,12 +5,12 @@ pub fn get_config_dir() -> String {
     let home_directory = match env::home_dir() {
         Some(home_directory) =>  home_directory,
         None => {
-            println!("Could not get home dir!");
+            eprintln!("Could not get home dir!");
             return "".to_string();
         }
     };
-    let path_to_config = home_directory.join(".config").join("batsignal-rs");
-    // create path if it does not exit ~/.config/batsignal-rs
+    let path_to_config = home_directory.join(".config").join("spider-volt");
+    // create path if it does not exit ~/.config/spider-volt
     match fs::create_dir_all(&path_to_config) {
         Ok(()) => (),
         Err(error) => {
@@ -44,7 +44,7 @@ pub fn print_config_toml_with_message(config: &Config, message: &str) -> Result<
 pub fn handle_config_file(file_path: &str) -> Config {
     let path = Path::new(file_path);
     if !path.exists() {
-        println!("Could not find config.toml, Using Defaults");
+        eprintln!("Could not find config.toml, Using Defaults");
         return Config::default();
     }
     parse_toml(file_path)

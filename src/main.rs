@@ -14,17 +14,17 @@ mod audio;
 mod tests;
 
 /*
- * batsignal-rs [flags] [args]
+ * spider-volt [flags] [args]
  * -h, --help
  * -V, --version
  *
  * -c, --config <file>
  *   , --print-config
  *   , --print-config-template
- *   , --create-config creates a config template to ~/.config/batsignal-rs
+ *   , --create-config creates a config template to ~/.config/spider-volt
  *
  * if no flags are passed 
- *      the config file in ~/.config/batsignal-rs is used
+ *      the config file in ~/.config/spider-volt is used
  * if no config file is found
  *       a default config is used
  *
@@ -44,7 +44,7 @@ fn main() {
     }
     
     let configuration = handle_config_file(&cli_arguments.config_path);
-    
+
     if cli_arguments.print_config {
         print_config_toml_with_message(&configuration,
             "Printing Current Config File").ok();
@@ -74,7 +74,7 @@ fn main() {
     
     loop {
             battery_stats.update_battery_stats(&manager, &mut battery);
-            println!("{:?}", battery_stats);
+            // println!("{:?}", battery_stats);
             battery_stats.handle_charger_notifications(charger_notif, notif_time);
             battery_stats.handle_battery_state_change(&mut battery_notif_sent);
             battery_stats.handle_battery(low_level_notifs, high_level_notifs, notif_time, &mut battery_notif_sent);

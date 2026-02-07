@@ -233,19 +233,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 
 [[package]]
-name = "batsignal-rs"
-version = "0.1.0"
-dependencies = [
- "battery",
- "clap",
- "notify-rust",
- "rodio",
- "rstest",
- "serde",
- "toml",
-]
-
-[[package]]
 name = "battery"
 version = "0.7.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1305,6 +1292,19 @@ name = "slab"
 version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
+
+[[package]]
+name = "spider-volt"
+version = "0.1.0"
+dependencies = [
+ "battery",
+ "clap",
+ "notify-rust",
+ "rodio",
+ "rstest",
+ "serde",
+ "toml",
+]
 
 [[package]]
 name = "strsim"
